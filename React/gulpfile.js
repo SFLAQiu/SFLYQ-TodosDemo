@@ -6,18 +6,18 @@ var htmlreplace = require('gulp-html-replace');
 var less=require('gulp-less');
 
 var path = {
-    HTML: ['*.html'],
+    CopyFiles: ['*.html','css/*.css'],
     JS: ['src/*.jsx', 'src/**/*.jsx'],
-    LESS: ['less/*.less', '!src/less/**/{reset,test}.less'],
-    CSS:'css',
-    MINIFIED_OUT: 'build.min.js',
+    LESS: ['less/*.less'],
+    HTML:['*.html'],
     DEST_SRC: 'dist/src', //把从jsx文件转换而来的文件放这里
-    DEST_BUILD: 'dist/build',
-    DEST: 'dist'
+    DEST_CSS:'dist/css',
+    DEST_HTML:'dist',
+
 };
 
 //编码jsx
-gulp.task('transform', function(){
+gulp.task('jsx', function(){
     gulp.src(path.JS)
         .pipe(react())
         .pipe(gulp.dest(path.DEST_SRC))
@@ -26,24 +26,33 @@ gulp.task('transform', function(){
 gulp.task('less',function(){
     gulp.src(path.LESS)
         .pipe(less())
-        .pipe(gulp.dest(path.CSS));
-
+        .pipe(gulp.dest(path.DEST_CSS));
 })
-//跟踪变化
-gulp.task('watch', function(){
-    var wathFiles=[];
-    wathFiles=wathFiles.concat(path.JS);
-    wathFiles=wathFiles.concat(path.LESS);
-    wathFiles=wathFiles.concat(path.HTML);
-    console.log(wathFiles.toString());
-    gulp.watch(wathFiles, ['transform','less']);
+
+//copy HTML
+gulp.task('copy-html',function(){
+    gulp.src(path.HTML)
+        .pipe(gulp.dest(path.DEST_HTML));
+})
+
+
+//跟踪JSX变化
+gulp.task('watchJS', function(){
+    gulp.watch(path.JS, ['jsx']);
 });
 
-//拷贝文件
-gulp.task('copy', function(){
-   gulp.src(path.HTML)
-    .pipe(gulp.dest(path.DEST));
+//跟踪LESS变化
+gulp.task('watchCSS', function(){
+    gulp.watch(path.LESS, ['less']);
 });
+
+
+//跟踪HTML变化
+gulp.task('watchHTML', function(){
+    gulp.watch(path.HTML, ['copy-html']);
+});
+
+
 //名称为default的task，需要
-gulp.task('default',['watch','transform','less','copy']);
+gulp.task('default',['copy-html','jsx','less','watchJS','watchCSS','watchHTML']);
 
