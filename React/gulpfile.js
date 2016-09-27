@@ -4,6 +4,7 @@ var uglify = require('gulp-uglify');
 var react = require('gulp-react');
 var htmlreplace = require('gulp-html-replace');
 var less=require('gulp-less');
+var replace=require('gulp-replace');
 
 var path = {
     CopyFiles: ['*.html','css/*.css'],
@@ -13,6 +14,7 @@ var path = {
     DEST_SRC: 'dist/src', //把从jsx文件转换而来的文件放这里
     DEST_CSS:'dist/css',
     DEST_HTML:'dist',
+    BowerJs:/bower_components\/[^"]*\/([^"]*\.js)/g
 
 };
 
@@ -32,6 +34,9 @@ gulp.task('less',function(){
 //copy HTML
 gulp.task('copy-html',function(){
     gulp.src(path.HTML)
+        .pipe(replace(path.BowerJs,"src/$1"))
+        .pipe(replace(path.DEST_SRC,"src"))
+        .pipe(replace(path.DEST_CSS,"css"))
         .pipe(gulp.dest(path.DEST_HTML));
 })
 
