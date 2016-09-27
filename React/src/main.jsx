@@ -14,7 +14,7 @@ var GoodsItems = React.createClass({
         var html = datas.map(function (proInfo,index) {
             if (!proInfo) return;
             return (
-                <li key={proInfo.Id+index} className="good-item" >
+                <li key={index} className="good-item" >
                     <a href="javascript:;" className="link-box">
                         <span className="left_box">
                             <img src={proInfo.ImageUrl + '!240.240'} alt="" className="ui-imglazyload"/>

@@ -14,7 +14,7 @@ var GoodsItems = React.createClass({displayName: "GoodsItems",
         var html = datas.map(function (proInfo,index) {
             if (!proInfo) return;
             return (
-                React.createElement("li", {key: proInfo.Id+index, className: "good-item"}, 
+                React.createElement("li", {key: index, className: "good-item"}, 
                     React.createElement("a", {href: "javascript:;", className: "link-box"}, 
                         React.createElement("span", {className: "left_box"}, 
                             React.createElement("img", {src: proInfo.ImageUrl + '!240.240', alt: "", className: "ui-imglazyload"}), 
