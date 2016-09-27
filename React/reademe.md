@@ -21,5 +21,6 @@
 * 其他命令
  * tsd query xxx 查tsd
  * bower info xxx 查看版本
+ * http-server 启动node web服务器，需要npm先安装
 
  

@@ -6,7 +6,7 @@ var htmlreplace = require('gulp-html-replace');
 var less=require('gulp-less');
 
 var path = {
-    HTML: 'src/index.html',
+    HTML: ['*.html'],
     JS: ['src/*.jsx', 'src/**/*.jsx'],
     LESS: ['less/*.less', '!src/less/**/{reset,test}.less'],
     CSS:'css',
@@ -34,15 +34,16 @@ gulp.task('watch', function(){
     var wathFiles=[];
     wathFiles=wathFiles.concat(path.JS);
     wathFiles=wathFiles.concat(path.LESS);
+    wathFiles=wathFiles.concat(path.HTML);
     console.log(wathFiles.toString());
     gulp.watch(wathFiles, ['transform','less']);
 });
+
+//拷贝文件
+gulp.task('copy', function(){
+   gulp.src(path.HTML)
+    .pipe(gulp.dest(path.DEST));
+});
 //名称为default的task，需要
-gulp.task('default',['watch','transform','less']);
+gulp.task('default',['watch','transform','less','copy']);
 
-
-// //把src/index.html这个文件复制放到dist中
-// gulp.task('copy', function(){
-//    gulp.src(path.HTML)
-//     .pipe(gulp.dest(path.DEST));
-// });
