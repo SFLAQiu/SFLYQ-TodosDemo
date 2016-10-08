@@ -1,15 +1,23 @@
-/***
- * 商品列表组件
- */
-var GoodsItems = React.createClass({
-    getInitialState: function () {
-        return {};
-    },
+interface IGoodsItemProps {
+    GoodDatas: any,
+    dd: string
+}
+interface IGoodsItemState {
+
+}
+class GoodsItem extends React.Component<IGoodsItemProps, IGoodsItemState>{
+    public State:IGoodsItemState;
+    constructor(props: IGoodsItemProps) {
+        super(props);
+        this.state={};
+        this.State=this.state;
+    }
     /**
      * 获取商品HTML
-     * @datas array[] 商品数据集合
+     * @param {*} datas  商品数据集合
+     * @returns {JSX.Element}
      */
-    goodsHtml: function (datas) {
+    public goodsHtml(datas: any): JSX.Element {
         if (!datas) return;
         var html = datas.map(function (proInfo, index) {
             if (!proInfo) return;
@@ -44,9 +52,12 @@ var GoodsItems = React.createClass({
                 </li>);
         });
         return html;
-    },
-    componentDidMount: function () { },
-    render: function () {
+    }
+    /**
+     * 
+     * @returns {JSX.Element}
+     */
+    public render(): JSX.Element {
         return (
             <div className="good-main">
                 <ul id="good_main">
@@ -56,24 +67,49 @@ var GoodsItems = React.createClass({
             </div>
         );
     }
-});
+}
 
-/**
- * 商品组件
- */
-var Goods = React.createClass({
-    getInitialState: function () {
-        return {
+
+
+interface IGoodsProps { }
+interface IGoodsState {
+    goods?: any,
+    loading?: boolean,
+    pageIdex?: number
+}
+class GoodMains extends React.Component<IGoodsProps, IGoodsState>{
+    public State:IGoodsState;
+    constructor(props: IGoodsProps) {
+        super(props);
+        this.state= {
             goods: [],
             pageIdex: 1,
             loading: false
         };
-    },
+        this.State=this.state;
+    }
+    /**
+     *是否需要展示loding 
+     * 
+     * @param {boolean} show
+     * @returns {void}
+     */
+    public showLoading(show: boolean): void {
+        var loading = document.getElementById("loading");
+        if (show) {
+            loading.style.display = "block";
+            return;
+        }
+        loading.style.display = "none";
+        return;
+
+    }
     /**
      * 加载数据
-     * @pageIndex int 页码
+     * 
+     * @param {number} pageIndex
      */
-    loadData: function (pageIndex) {
+    public loadData(pageIndex: number): void {
         var _this = this;
         _this.showLoading(true);
         $.getJSON("http://gw.fanhuan.com/zhi/GetJiuJiuProducts?fps=10&ps=30&p=" + pageIndex + "&cid=-1&callback=?", function (result) {
@@ -84,44 +120,34 @@ var Goods = React.createClass({
                 loading: false
             });
         });
-    },
-    /**
-     * 是否需要展示loding
-     * @show bool 是否
-     */
-    showLoading: function (show) {
-        var loading = document.getElementById("loading");
-        if (show) {
-            loading.display = "block";
-            return;
-        }
-        loading.display = "none";
-        return;
-    },
+    }
     /**
      * 滚动操作
-     * @show bool 是否
+     * @returns {void}
      */
-    handleScroll: function () {
+    public handleScroll(): void {
         var sTop = window.scrollY;
         var loadHeight = window.innerHeight + sTop + 500;
+        var t=this;
         var height = document.getElementById("good_main").offsetHeight;
         if (loadHeight > height) {
-            if (this.state.loading) return;
-            this.setState({ pageIdex: this.state.pageIdex + 1, loading: true });
-            this.loadData(this.state.pageIdex);
+            if (t.state.loading) return;
+            t.setState({ pageIdex: t.state.pageIdex + 1, loading: true });
+            t.loadData(t.state.pageIdex);
             console.log("翻页");
         }
-    },
-    componentDidMount: function () {
+    }
+    public componentDidMount(): void {
         this.loadData(1);
-        document.addEventListener('scroll', this.handleScroll);
-    },
-    render: function () {
+        document.addEventListener('scroll',()=> this.handleScroll());
+    }
+
+    render() {
         return (
-            <GoodsItems GoodDatas={this.state.goods}/>
+            <GoodsItem dd="" GoodDatas={this.state.goods}/>
         );
     }
-});
 
-ReactDOM.render(<Goods/>, document.getElementById("good_box"));
+}
+
+ReactDOM.render(<GoodMains/>, document.getElementById("good_box"));
