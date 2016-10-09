@@ -13,8 +13,9 @@ class GoodsItem extends React.Component<IGoodsItemProps, IGoodsItemState>{
         this.State=this.state;
     }
     /**
-     * 获取商品HTML
-     * @param {*} datas  商品数据集合
+     *  获取商品HTML
+     * 
+     * @param {*} datas
      * @returns {JSX.Element}
      */
     public goodsHtml(datas: any): JSX.Element {
@@ -137,6 +138,9 @@ class GoodMains extends React.Component<IGoodsProps, IGoodsState>{
             console.log("翻页");
         }
     }
+    /**
+     * 组件渲染完成后触发
+     */
     public componentDidMount(): void {
         this.loadData(1);
         document.addEventListener('scroll',()=> this.handleScroll());
